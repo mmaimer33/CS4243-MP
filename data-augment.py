@@ -6,13 +6,12 @@ import tensorflow as tf
 
 from tensorflow.keras import layers
 
-# Verify the directory path and ensure it contains images in the allowed formats
 data_dir = pathlib.Path("./data/full-dataset/train/clean/")
 image_count = sum(1 for _ in data_dir.rglob('*.png'))
 print(f"Number of images found: {image_count}")
 
 if image_count == 0:
-    raise ValueError("No images found (mine)")
+    raise ImportError("No images found (mine)")
 
 batch_size = 32
 train_ds = tf.keras.preprocessing.image_dataset_from_directory(
@@ -24,6 +23,7 @@ train_ds = tf.keras.preprocessing.image_dataset_from_directory(
 IMG_HEIGHT = 80
 IMG_WIDTH = 400
 
+# Main augment layers !!! USE THIS
 augment_layers = tf.keras.Sequential([
     layers.Resizing(IMG_HEIGHT, IMG_WIDTH),
     layers.Rescaling(1./255),
@@ -34,16 +34,17 @@ augment_layers = tf.keras.Sequential([
     layers.RandomRotation(factor=0.02, fill_mode='nearest'),
 ])
 
-def visualize_augmented_images(dataset, augmentation_layer, num_images=5):
+# To see examples:
+
+def show_images(dataset, augmentation_layer, num_images=5):
     plt.figure(figsize=(10, 10))
     for images in dataset.take(1):
         augmented_images = augmentation_layer(images)
         augmented_images = tf.clip_by_value(augmented_images, 0.0, 1.0)
         for i in range(num_images):
-            ax = plt.subplot(1, num_images, i + 1)
+            _ = plt.subplot(1, num_images, i + 1)
             plt.imshow(augmented_images[i].numpy())
             plt.axis("off")
     plt.show()
 
-# Visualize augmented images
-visualize_augmented_images(train_ds, augment_layers, 3)
+show_images(train_ds, augment_layers, 3)
