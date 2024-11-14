@@ -8,3 +8,6 @@
 4. Push to remote
 5. Open a PR to merge
 
+## Link to Github
+https://github.com/mmaimer33/CS4243-MP
+
