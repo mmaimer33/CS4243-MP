@@ -167,3 +167,4 @@ cython_debug/
 # Custom
 cleaned_images/
 extracted_chars/
+data/augmented_chars/
